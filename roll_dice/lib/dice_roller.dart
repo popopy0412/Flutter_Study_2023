@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'dart:math';
 
 final randomizer = Random();
+const gap = Duration(milliseconds: 200);
 
 class DiceRoller extends StatefulWidget {
   const DiceRoller({super.key});
@@ -14,8 +17,16 @@ class _DiceRollerState extends State<DiceRoller> {
   var currentDiceRoll = 2;
 
   void rollDice() {
-    setState(() {
-      currentDiceRoll = randomizer.nextInt(6) + 1;
+    var count = 0;
+    Timer.periodic(gap, (timer) {
+      setState(() {
+        // 카운트를 증가시킵니다.
+        count++;
+        currentDiceRoll = randomizer.nextInt(6) + 1;
+        if (count >= 6) {
+          timer.cancel();
+        }
+      });
     });
   }
 
@@ -40,7 +51,7 @@ class _DiceRollerState extends State<DiceRoller> {
               fontSize: 28,
             ),
           ),
-          child: const Text('Roll Dice'),
+          child: const Text('주사위 굴리기'),
         ),
       ],
     );
